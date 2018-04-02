@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600');
+body {
+	font-family: Montserrat;
+}
+@media only screen and (max-width: 768px) {
+	div#search_box {
+		width: 100%;
+	}
+	.product-image {
+		width: 100%;
+	}
+}
+div#header {
+	background-color: #231a3d;
+}
+div#main-header {
+	background-color: #231a3d;
+	background-image: linear-gradient(180deg, #231a3d 0%, #231a3d 30%, #3a286d 100%);
+	color: #fff;
+}
+div#header {
+	margin: 0;
+	padding: 0 10 0 10;
+}
+a#header_title {
+	color: white;
+	padding-left: 10px;
+	float: left;
+}
+.product-image {
+	width: 150px;
+	height: 220px; 
+}

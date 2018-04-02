@@ -1,0 +1,219 @@
+{% load template_extra %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>BetterHealth</title>
+	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Exo:500" rel="stylesheet">
+
+	<!-- Slick CSS Imports -->
+	<link rel="stylesheet" type="text/css" href="/static/slick/slick.css"/>
+	<link rel="stylesheet" type="text/css" href="/static/slick/slick-theme.css"/>
+
+	<link rel="stylesheet" type="text/css" href="/static/better_health_home.css"/>
+
+	<style type="text/css">
+		.button-badge {
+		  background-color: transparent;
+		  color: white;
+		  text-decoration: none;
+		  padding: 1rem 1.5rem;
+		  position: relative;
+		  display: inline-block;
+		  transition: all ease 0.4s;
+		  font-size: 16px;
+		}
+
+		.badge {
+		  background-color: red;
+		  padding: 2px;
+		  position: absolute;
+		  top: -2px;
+		  right: -2px;
+		  font-size: 12px;
+		  border-radius: 50%;
+		}
+	</style>
+
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  	<!-- Slick JS Imports -->
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+	<script type="text/javascript" src="/static/slick/slick.min.js"></script>
+</head>
+<body>
+	<div class="container-fluid">
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div id="header" class="container-fluid">
+				<div class="navbar-header">
+					<a id="header_title" class="navbar-brand" href="/" style="float: left; margin-top: 10px;"><b>BetterHealth</b></a>
+				</div> <!-- closed div with class navbar-header -->
+				<span style="margin-top: 20px;">
+					<a href="{% url 'viewcart' %}" class="button-badge" style="float: right; margin-top: 15px;">
+						{% if user.is_authenticated %}
+					    	<i class="glyphicon glyphicon-shopping-cart"></i>
+					  		<span class="badge alert"> {{ cart.count }}</span>
+					  	{% else %}
+					    	<i class="glyphicon glyphicon-shopping-cart disabled" title="Please login first" style="color: gray"></i>
+					  	{% endif %}
+					</a>
+				</span>
+				<span style="float: right;">
+					{% if user.is_authenticated %}
+						<!-- <a href="#"><img src="/media/images/application/img_avatar_user.png" alt="img avatar user" style="width: 48px; height: 48px; margin-top: 10px; margin-left: 15px;"></a> -->
+						<a class="btn btn-default" style="margin-top: 20px; margin-left: 15px;" href = {% url 'logout' %}>Logout</a>
+					{% else %}
+						<button class="btn btn-default" style="margin-top: 20px; margin-left: 15px;" type="button" data-toggle = "modal" data-target = "#myModal">Login</button>
+					{% endif %}
+				</span>
+				<form name="myform" method="GET" action = {% url 'search' %} style="float: right; margin-top: 20px;"> 
+					<div class="form-group">
+						<div id="search_input_box" class="icon-addon addon-lg">
+							<input type="text" placeholder="Search Products" class="form-control" id="text" name="search" required>
+						</div> <!-- closed div with id search_input_box -->
+					</div> <!-- closed div with class form-group -->
+				</form>
+			</div> <!-- closed div with id header -->
+		</nav>
+	</div>
+
+	<!-- Modal -->
+	<center>
+		<div id="myModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+			<!-- Modal content-->
+				<div class="modal-content modal-sm">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Login</h4>
+					</div>
+					<div class="modal-body">
+						<form method="POST" action = {% url 'login' %}> {% csrf_token %}
+							<input type="text" class="form-control" name="Username" placeholder="Username" required>
+							<input type="password" class="form-control" name="Password" placeholder="Password" required style="margin-top: 10px;">
+							<input type="submit" name="Login" value="Login" class="btn btn-success" style="margin-top: 10px; width: 100%">
+							<p style="margin-top: 10px;">Don't have an account? <a href="#" data-toggle = "modal" data-target = "#signupModal">SignUp</a></p>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="signupModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+			<!-- Modal content-->
+				<div class="modal-content modal-sm">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Create User</h4>
+					</div>
+					<div class="modal-body">
+						<form method="POST" action = {% url 'signup' %}> {% csrf_token %}
+							<input type="text" class="form-control" name="Username" placeholder="Username" required>
+							<input type="email" class="form-control" name="Email" placeholder="Email" required style="margin-top: 10px;">
+							<input type="password" class="form-control" name="Password" placeholder="Password" required style="margin-top: 10px;">
+							<input type="password" class="form-control" name="ConfirmPassword" placeholder="Confirm Password" required style="margin-top: 10px;">
+							<input type="submit" name="Submit" value="Submit" class="btn btn-success" style="margin-top: 10px; width: 100%">
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</center>
+
+	<div id="slider-popular-products" class="container-fluid" style="margin: 55px 0 0 0; padding: 0px;">
+		<div class="img">
+          <a href="#">
+            <div style="margin: 0; padding: 0">
+              <img src='https://www.bodybuilding.com/images/merchandising/january-2018/2018_jan_on_bogo_50_Store_1920x420.jpg' alt='course image' style="max-width: 100%" class="course-image">
+            </div> <!-- closed div with class course-image-box -->
+          </a>
+        </div> <!-- closed div with class img img-thumbnail -->
+        <div class="img">
+          <a href="#">
+            <div style="margin: 0; padding: 0">
+              <img src='https://www.bodybuilding.com/images/merchandising/december2017/2017_-All_Access_Store_1920x420_Revised.jpg' alt='course image' style="max-width: 100%" class="course-image">
+            </div> <!-- closed div with class course-image-box -->
+          </a>
+        </div> <!-- closed div with class img img-thumbnail -->
+        <div class="img">
+          <a href="#">
+            <div style="margin: 0; padding: 0">
+              <img src='https://www.bodybuilding.com/images/merchandising/january-2018/2018_BOGO_Fatburner_Homepage_1920x420.jpg' alt='course image' style="max-width: 100%" class="course-image">
+            </div> <!-- closed div with class course-image-box -->
+          </a>
+        </div> <!-- closed div with class img img-thumbnail -->
+	</div>
+
+	<div class="container" style="margin-top: 20px;">
+		<button class="btn btn-info" onclick="category_filter_view()" style="float: right; padding: 3px 10px;"><p class="glyphicon glyphicon-filter" style="font-size: 12px;">Filter</p></button>
+        <div id="category_filters" class="hidden">
+        	{% for category in categories %}
+	            <input id="filter_{{ category.slug }}" type="checkbox" checked="checked" onclick="filter_click('{{ category.slug }}')" />
+	            <label for="filter_{{ category.slug }}">{{ category.category_name }} </label>
+	        {% endfor %}
+        </div>
+		{% for category in categories %}
+			<div class="category-block" id="{{ category.slug }}">
+				<h3 class="category-name">{{ category.category_name }}</h3>
+				<div class="row" style="margin-top: 20px;">
+					{% for product in category.product_set.all|slice:"0:4" %}	
+						<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+							<div class="thumbnail" style="margin: 10px; padding: 20px;">
+								<a href="betterhealth/{{ product.slug }}" style="margin: 0px; padding: 0px;">
+									<div class="product-image-box">
+										{% if product.product_image != Null %}
+											<center><img class="product-image" src="/media/{{ product.product_image }}" alt="health" style="margin: 0px; padding: 0px;"></center>
+										{% else %}
+										    <center><img class="product-image" src="https://www.w3schools.com/css/img_fjords.jpg" alt="health" style="margin: 0px; padding: 0px;"></center>
+										{% endif %}
+									</div>
+									<div class="product-description" style="padding: 0px 5px">
+										<h5 style="color: black"><b>{{ product.product_name|ellipses:20 }}</b></h5>
+										<p style="font-size: 12px;"><span style="color: black">{{ product.package_qty }}{{ product.package_type }} </span><span style="color: gray; margin: 0px 5px 0px 10px"><del>&#8377;{{ product.mrp }}</del></span> <span style="color: black">&#8377;{{ product.saleprice }}</span></p>
+									</div>
+								</a>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+				<span style="float: right;"><a href="{{ category.slug }}">Show All</a></span>
+			</div>
+		{% endfor %}
+	</div>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+          $('#slider-popular-products').slick({
+              slidesToShow: 1,
+              slidesToScroll: 1,
+              arrows: false,
+              infinite: true,
+              cssEase: 'linear',
+              accessibility: true,
+              mobileFirst: true,
+              draggable: true,
+              autoplay: true,
+              autoplaySpeed: 2000,
+              dots: true,
+          });
+      	});
+
+      	function category_filter_view(){
+      		$("div[id='category_filters']").toggleClass("hidden");
+      	}
+
+      	function filter_click(category_slug) {
+      		if ($("div[id='" + category_slug + "']").css("display") != "none") {
+	      		$("div[id='" + category_slug + "']").css("display", "none");
+      		}else{
+      			$("div[id='" + category_slug + "']").css("display", "");
+      		}
+      	}
+	</script>
+</body>
+</html>
